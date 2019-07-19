@@ -4,22 +4,32 @@ const app = express()
 let persons = 
     [
           {
-            "name": "Tom Hanks",
-            "number": "12345678",
+            "name": "Arto Hellas",
+            "number": "040-123456",
             "id": 1
           },
           {
-            "name": "Tom Cruise",
-            "number": "98453290",
+            "name": "Ada Lovelace",
+            "number": "39-44-5323523",
             "id": 2
-          }
+          },
+          {
+            "name": "Dan Abramov",
+            "number": "12-43-234345",
+            "id": 3
+          },
+          {
+            "name": "Mary Poppendieck",
+            "number": "39-23-6423122",
+            "id": 4
+          },
     ]
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+app.get('/api', (req, res) => {
+    res.send('<h1>Welcome to Server-side Phonebook App!</h1>')
 })
       
-app.get('/persons', (req, res) => {
+app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
       
