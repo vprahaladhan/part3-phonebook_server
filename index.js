@@ -1,8 +1,28 @@
 const express = require('express')
-const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const uuid = require('uuid')
+const app = express()
 
 app.use(bodyParser.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(assignId)
+
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
+function assignId (req, res, next) {
+  req.id = uuid.v4()
+  next()
+}
+
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+}
+app.use(requestLogger)
 
 let persons = 
     [
@@ -89,6 +109,12 @@ app.post('/api/persons', (request, response) => {
     persons = persons.concat(person)
     response.json(person)
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+}
+  
+app.use(unknownEndpoint)
 
 const setResponse = (response, id) => {
     response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
