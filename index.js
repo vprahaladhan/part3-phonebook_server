@@ -1,5 +1,8 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 
 let persons = 
     [
@@ -44,15 +47,27 @@ app.get('/api/persons/:id', (req, res) => {
     person ? res.json(person) : setResponse(res, req.params.id)
 })
 
-const setResponse = (response, id) => {
-    response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
-}
-
 app.delete('/api/persons/:id', (req, res) => {
     persons = persons.filter(person => person.id != req.params.id)
     res.status(204).end()
 })
-      
+ 
+app.post('/api/persons', (req, res) => {
+    console.log(req.body)
+    let person = req.body
+    person.id =  getRandomInt(1000)
+    persons = persons.concat(person)
+    res.json(person)
+})
+
+const setResponse = (response, id) => {
+    response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
