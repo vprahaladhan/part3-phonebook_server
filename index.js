@@ -28,6 +28,11 @@ let persons =
 app.get('/api', (req, res) => {
     res.send('<h1>Welcome to Server-side Phonebook App!</h1>')
 })
+
+app.get('/info', (req, res) => {
+    const resString = `Phonebook has info for ${persons.length} people <p>${new Date()}`
+    res.send(resString)
+})
       
 app.get('/api/persons', (req, res) => {
     res.json(persons)
