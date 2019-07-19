@@ -52,12 +52,42 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
  
-app.post('/api/persons', (req, res) => {
-    console.log(req.body)
-    let person = req.body
+app.post('/api/persons', (request, response) => {
+    let person = request.body
+    console.log(`Name: ${person.name}, Number: ${person.number}.`)
+    if (!person.hasOwnProperty('name')) {
+        return response.status(400).json({ 
+          error: 'Name property not provided!' 
+        })
+    }
+
+    if (!person.hasOwnProperty('number')) {
+        return response.status(400).json({ 
+          error: 'Number property not provided!' 
+        })
+    }
+
+    if (person.name.trim().length === 0) {
+        return response.status(400).json({ 
+          error: 'Name cannot be blank!' 
+        })
+    }
+
+    if (person.number.toString().trim().length === 0) {
+        return response.status(400).json({ 
+          error: 'Number cannot be blank!' 
+        })
+    }
+
+    if (persons.find(thisPerson => thisPerson.name == person.name)) {
+        return response.status(400).json({
+            error: 'Name already exists in phonebook'
+        })
+    }
+
     person.id =  getRandomInt(1000)
     persons = persons.concat(person)
-    res.json(person)
+    response.json(person)
 })
 
 const setResponse = (response, id) => {
