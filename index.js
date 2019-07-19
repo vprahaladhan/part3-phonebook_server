@@ -45,9 +45,13 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 const setResponse = (response, id) => {
-    response.status(404)
-    response.send(`<h3>No person with ID: ${id} found!</h3>`)
+    response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
 }
+
+app.delete('/api/persons/:id', (req, res) => {
+    persons = persons.filter(person => person.id != req.params.id)
+    res.status(204).end()
+})
       
 const PORT = 3001
 app.listen(PORT, () => {
