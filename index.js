@@ -5,10 +5,12 @@ const uuid = require('uuid')
 const app = express()
 
 app.use(bodyParser.json())
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(assignId)
 
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+morgan.token('body', (req, res) => { 
+    return JSON.stringify(req.body) == "{}" ? ' ' : `{"name": "${req.body.name}", "number": "${req.body.number}"}`
+})
 
 function assignId (req, res, next) {
   req.id = uuid.v4()
@@ -107,6 +109,7 @@ app.post('/api/persons', (request, response) => {
 
     person.id =  getRandomInt(1000)
     persons = persons.concat(person)
+    console.log(persons)
     response.json(person)
 })
 
