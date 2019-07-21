@@ -5,6 +5,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(express.static('build'))
 
 morgan.token('body', (req, res) => { 
     return JSON.stringify(req.body) == "{}" ? ' ' : `{"name": "${req.body.name}", "number": "${req.body.number}"}`
@@ -126,8 +127,6 @@ const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
-app.use(express.static('build'))
 
 // console.log("Welcome to Phonebook Server")
 
