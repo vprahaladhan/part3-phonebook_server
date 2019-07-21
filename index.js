@@ -1,21 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const uuid = require('uuid')
 const app = express()
 
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-app.use(assignId)
 
 morgan.token('body', (req, res) => { 
     return JSON.stringify(req.body) == "{}" ? ' ' : `{"name": "${req.body.name}", "number": "${req.body.number}"}`
 })
-
-function assignId (req, res, next) {
-  req.id = uuid.v4()
-  next()
-}
 
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
@@ -25,6 +18,9 @@ const requestLogger = (request, response, next) => {
     next()
 }
 app.use(requestLogger)
+
+const cors = require('cors')
+app.use(cors())
 
 let persons = 
     [
@@ -109,7 +105,6 @@ app.post('/api/persons', (request, response) => {
 
     person.id =  getRandomInt(1000)
     persons = persons.concat(person)
-    console.log(persons)
     response.json(person)
 })
 
@@ -127,9 +122,9 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port: ${PORT}`)
 })
 
 // console.log("Welcome to Phonebook Server")
