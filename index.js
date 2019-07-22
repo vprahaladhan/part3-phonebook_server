@@ -5,6 +5,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+app.use(express.static('build'))
 
 morgan.token('body', (req, res) => { 
     return JSON.stringify(req.body) == "{}" ? ' ' : `{"name": "${req.body.name}", "number": "${req.body.number}"}`
@@ -44,6 +45,11 @@ let persons =
             "number": "39-23-6423122",
             "id": 4
           },
+          {
+            "name": "Suresh",
+            "number": "+91-98412 27971",
+            "id": 5
+          }
     ]
 
 app.get('/api', (req, res) => {
@@ -124,7 +130,7 @@ function getRandomInt(max) {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
 
 // console.log("Welcome to Phonebook Server")
