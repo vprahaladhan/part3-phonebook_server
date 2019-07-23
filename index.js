@@ -49,7 +49,6 @@ app.delete('/api/persons/:id', (req, res) => {
 })
  
 app.post('/api/persons', (request, response) => {
-    let person = request.body
     console.log(`Name: ${person.name}, Number: ${person.number}.`)
     if (!person.hasOwnProperty('name')) {
         return response.status(400).json({ 
@@ -81,10 +80,12 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    person.id =  getRandomInt(1000)
-    persons = persons.concat(person)
-    response.json(person)
-})
+    const person = new Contact({
+      name: req.body.name,
+      number: req.body.number
+    })
+    person.save().then(contact => res.json(contact))
+  })
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
@@ -94,10 +95,6 @@ app.use(unknownEndpoint)
 
 const setResponse = (response, id) => {
     response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
 }
 
 const PORT = process.env.PORT
