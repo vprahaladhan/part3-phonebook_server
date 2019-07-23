@@ -20,12 +20,14 @@ const contactSchema = new mongoose.Schema({
     type: String,
     unique: true,
     minlength: 5,
-    maxlength: 50
+    maxlength: 50,
+    required: true
   },
   number: {
     type: String,
     unique: true,
-    minlength: 8
+    minlength: 8,
+    required: true
   }
 })
 
