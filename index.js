@@ -31,8 +31,8 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-    let persons
-    Contact.find({}).then(contacts => res.send(`Phonebook has info for ${contacts.length} people <p>${new Date()}`))
+    Contact.find({}).then(contacts => 
+      res.send(`Phonebook has info for ${contacts.length} people <p>${new Date()}`))
 })
       
 app.get('/api/persons', (req, res) => {
@@ -40,18 +40,24 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    Contact.findById(req.params.id).then(contact => res.json(contact))
+    Contact.findById(req.params.id)
+      .then(contact => res.json(contact))
+      .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res) => {
-  Contact.findByIdAndUpdate(req.params.id, req.body).then(contact => {
-    console.log(`Contact ${contact.name} updated...`)
-    res.json(contact)
-  })
+  Contact.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(contact => {
+      console.log(`Contact ${contact.name} updated...`)
+      res.json(contact)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    Contact.findByIdAndDelete(req.params.id).then(contact => res.json(contact))
+    Contact.findByIdAndDelete(req.params.id)
+      .then(contact => res.json(contact))
+      .catch(error => next(error))
 })
  
 app.post('/api/persons', (req, res) => {
@@ -100,6 +106,18 @@ const unknownEndpoint = (request, response) => {
   
 app.use(unknownEndpoint)
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 const setResponse = (response, id) => {
     response.status(404).send(`<h3>No person with ID: ${id} found!</h3>`)
 }
@@ -108,22 +126,3 @@ const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
-// console.log("Welcome to Phonebook Server")
-
-// const http = require('http')
-
-// const app = http.createServer((req, res) => {
-//   res.writeHead(200, { 'Content-Type': 'text/plain' })
-//   console.log("Request recd at ", new Date())
-//   res.end('Hello World')
-// })
-
-// const app = http.createServer((request, response) => {
-//     response.writeHead(200, { 'Content-Type': 'application/json' })
-//     response.end(JSON.stringify(notes))
-// })
-
-// const port = 3001
-// app.listen(port)
-// console.log(`Server running on port ${port}`)
