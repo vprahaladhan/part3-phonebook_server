@@ -37,7 +37,7 @@ app.get('/info', (req, res) => {
 })
       
 app.get('/api/persons', (req, res) => {
-    res.json(Contact.find({}).then(contacts => contacts))
+  Contact.find({}).then(contacts => res.json(contacts))
 })
 
 app.get('/api/persons/:id', (req, res) => {
