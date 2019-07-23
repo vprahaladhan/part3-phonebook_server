@@ -39,13 +39,13 @@ app.get('/api/persons', (req, res) => {
   Contact.find({}).then(contacts => res.json(contacts))
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     Contact.findById(req.params.id)
       .then(contact => res.json(contact))
       .catch(error => next(error))
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
   Contact.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(contact => {
       console.log(`Contact ${contact.name} updated...`)
@@ -54,55 +54,23 @@ app.put('/api/persons/:id', (req, res) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Contact.findByIdAndDelete(req.params.id)
       .then(contact => res.json(contact))
-      .catch(error => console.log(`Error thrown in delete...${error.name}, ${error.message}`))
+      .catch(error => next(error))
 })
  
 app.post('/api/persons', (req, res) => {
     const person = req.body
     console.log(`Name: ${req.body.name}, Number: ${req.body.number}.`)
-    // if (!person.hasOwnProperty('name')) {
-    //     return res.status(400).json({ 
-    //       error: 'Name property not provided!' 
-    //     })
-    // }
-
-    // if (!person.hasOwnProperty('number')) {
-    //     return res.status(400).json({ 
-    //       error: 'Number property not provided!' 
-    //     })
-    // }
-
-    // if (person.name.trim().length === 0) {
-    //     return res.status(400).json({ 
-    //       error: 'Name cannot be blank!' 
-    //     })
-    // }
-
-    // if (person.number.toString().trim().length === 0) {
-    //     return res.status(400).json({ 
-    //       error: 'Number cannot be blank!' 
-    //     })
-    // }
-
-    // if (persons.find(thisPerson => thisPerson.name == person.name)) {
-    //     return response.status(400).json({
-    //         error: 'Name already exists in phonebook'
-    //     })
-    // }
-
     const contact = new Contact({
       name: req.body.name,
       number: req.body.number
     })
+
     contact.save()
       .then(newContact => res.json(newContact))
-      .catch(error => {
-        console.log(`Error thrown in save...${error.name}, ${error.message}`)
-        next(error) 
-      })
+      .catch(error => next(error))
   })
 
 const unknownEndpoint = (request, response) => {
