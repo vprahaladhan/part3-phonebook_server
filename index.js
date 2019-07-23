@@ -60,7 +60,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
       .catch(error => next(error))
 })
  
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, re, next) => {
     const person = req.body
     console.log(`Name: ${req.body.name}, Number: ${req.body.number}.`)
     const contact = new Contact({
