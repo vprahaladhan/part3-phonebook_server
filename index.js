@@ -58,25 +58,25 @@ app.post('/api/persons', (req, res) => {
     const person = req.body
     console.log(`Name: ${req.body.name}, Number: ${req.body.number}.`)
     if (!person.hasOwnProperty('name')) {
-        return response.status(400).json({ 
+        return res.status(400).json({ 
           error: 'Name property not provided!' 
         })
     }
 
     if (!person.hasOwnProperty('number')) {
-        return response.status(400).json({ 
+        return res.status(400).json({ 
           error: 'Number property not provided!' 
         })
     }
 
     if (person.name.trim().length === 0) {
-        return response.status(400).json({ 
+        return res.status(400).json({ 
           error: 'Name cannot be blank!' 
         })
     }
 
     if (person.number.toString().trim().length === 0) {
-        return response.status(400).json({ 
+        return res.status(400).json({ 
           error: 'Number cannot be blank!' 
         })
     }
