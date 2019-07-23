@@ -43,6 +43,10 @@ app.get('/api/persons/:id', (req, res) => {
     Contact.findById(req.params.id).then(contact => res.json(contact))
 })
 
+app.put('/api/persons/:id', (req, res) => {
+  Contact.findByIdAndUpdate(req.params.id).then(contact => res.json(contact))
+})
+
 app.delete('/api/persons/:id', (req, res) => {
     Contact.findByIdAndDelete(req.params.id).then(contact => res.json(contact))
 })
