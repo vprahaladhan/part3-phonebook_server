@@ -40,9 +40,7 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-    const person = persons.find(person => person.id == req.params.id)
-
-    person ? res.json(person) : setResponse(res, req.params.id)
+    Contact.findById(req.params.id).then(contact => res.json(contact))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
