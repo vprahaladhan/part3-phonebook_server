@@ -99,7 +99,10 @@ app.post('/api/persons', (req, res) => {
     })
     contact.save()
       .then(newContact => res.json(newContact))
-      .catch(error => console.log(`Error thrown in save...${error.name}, ${error.message}`))
+      .catch(error => {
+        console.log(`Error thrown in save...${error.name}, ${error.message}`)
+        next(error) 
+      })
   })
 
 const unknownEndpoint = (request, response) => {
