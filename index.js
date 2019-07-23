@@ -44,7 +44,10 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 app.put('/api/persons/:id', (req, res) => {
-  Contact.findByIdAndUpdate(req.params.id).then(contact => res.json(contact))
+  Contact.findByIdAndUpdate(req.params.id, req.body).then(contact => {
+    console.log(`Contact ${contact.name} updated...`)
+    res.json(contact)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
