@@ -31,7 +31,8 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-    const persons = Contact.find({}).then(contacts => contacts)
+    let persons
+    Contact.find({}).then(contacts => persons = contacts)
     const resString = `Phonebook has info for ${persons.length} people <p>${new Date()}`
     res.send(resString)
 })
