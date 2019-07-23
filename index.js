@@ -24,7 +24,7 @@ app.use(requestLogger)
 const cors = require('cors')
 app.use(cors())
 
-const Contact = require('./models/note')
+const Contact = require('./models/contact')
 
 app.get('/api', (req, res) => {
     res.send('<h1>Welcome to Server-side Phonebook App!</h1>')
