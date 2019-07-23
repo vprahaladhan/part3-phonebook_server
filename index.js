@@ -57,7 +57,7 @@ app.put('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     Contact.findByIdAndDelete(req.params.id)
       .then(contact => res.json(contact))
-      .catch(error => console.log("Error thrown in delete..."))
+      .catch(error => console.log(`Error thrown in delete...${error.name}, ${error.message}`))
 })
  
 app.post('/api/persons', (req, res) => {
