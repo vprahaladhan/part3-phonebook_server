@@ -49,7 +49,7 @@ app.delete('/api/persons/:id', (req, res) => {
 })
  
 app.post('/api/persons', (request, response) => {
-    console.log(`Name: ${person.name}, Number: ${person.number}.`)
+    console.log(`Name: ${req.body.name}, Number: ${req.body.number}.`)
     if (!person.hasOwnProperty('name')) {
         return response.status(400).json({ 
           error: 'Name property not provided!' 
