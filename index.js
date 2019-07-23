@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
@@ -23,46 +24,20 @@ app.use(requestLogger)
 const cors = require('cors')
 app.use(cors())
 
-let persons = 
-    [
-          {
-            "name": "Arto Hellas",
-            "number": "040-123456",
-            "id": 1
-          },
-          {
-            "name": "Ada Lovelace",
-            "number": "39-44-5323523",
-            "id": 2
-          },
-          {
-            "name": "Dan Abramov",
-            "number": "12-43-234345",
-            "id": 3
-          },
-          {
-            "name": "Mary Poppendieck",
-            "number": "39-23-6423122",
-            "id": 4
-          },
-          {
-            "name": "Suresh",
-            "number": "+91-98412 27971",
-            "id": 5
-          }
-    ]
+const Contact = require('./models/note')
 
 app.get('/api', (req, res) => {
     res.send('<h1>Welcome to Server-side Phonebook App!</h1>')
 })
 
 app.get('/info', (req, res) => {
+    const persons = Contact.find({}).then(contacts => contacts)
     const resString = `Phonebook has info for ${persons.length} people <p>${new Date()}`
     res.send(resString)
 })
       
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    res.json(Contact.find({}).then(contacts => contacts))
 })
 
 app.get('/api/persons/:id', (req, res) => {
@@ -128,7 +103,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

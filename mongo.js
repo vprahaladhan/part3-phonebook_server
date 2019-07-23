@@ -25,8 +25,8 @@ if (process.argv[3] && process.argv[4]) {
         number: process.argv[4],
     })
     contact.save().then(response => {
-    console.log(`added ${response.name} number ${response.number} to phonebook`)
-    mongoose.connection.close()
+        console.log(`added ${response.name} number ${response.number} to phonebook`)
+        mongoose.connection.close()
     })
 }
 else {
