@@ -48,7 +48,8 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
  
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (req, res) => {
+    const person = req.body
     console.log(`Name: ${req.body.name}, Number: ${req.body.number}.`)
     if (!person.hasOwnProperty('name')) {
         return response.status(400).json({ 
@@ -74,17 +75,17 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if (persons.find(thisPerson => thisPerson.name == person.name)) {
-        return response.status(400).json({
-            error: 'Name already exists in phonebook'
-        })
-    }
+    // if (persons.find(thisPerson => thisPerson.name == person.name)) {
+    //     return response.status(400).json({
+    //         error: 'Name already exists in phonebook'
+    //     })
+    // }
 
-    const person = new Contact({
+    const contact = new Contact({
       name: req.body.name,
       number: req.body.number
     })
-    person.save().then(contact => res.json(contact))
+    contact.save().then(newContact => res.json(newContact))
   })
 
 const unknownEndpoint = (request, response) => {
