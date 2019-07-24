@@ -46,12 +46,21 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  Contact.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .then(contact => {
-      console.log(`Contact ${contact.name} updated...`)
-      res.json(contact)
-    })
-    .catch(error => next(error))
+    Contact.findById(req.params.id)
+            .then(contact => {
+              contact.number = req.body.number
+              console.log(contact)
+              contact.save()
+                      .then(newContact => {
+                        console.log("Updating here")
+                        res.json(newContact)
+                      })
+                      .catch(error => {
+                        console.log(`Error is ${error.message}`)
+                        next(error)
+                      })
+            })
+            .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {

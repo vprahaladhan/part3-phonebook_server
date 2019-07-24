@@ -33,6 +33,11 @@ const contactSchema = new mongoose.Schema({
 
 contactSchema.plugin(uniqueValidator)
 
+// contactSchema.pre('findOneAndUpdate', next => {
+//   this.options.runValidators = true
+//   next()
+// })
+
 contactSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
