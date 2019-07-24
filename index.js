@@ -51,14 +51,8 @@ app.put('/api/persons/:id', (req, res, next) => {
               contact.number = req.body.number
               console.log(contact)
               contact.save()
-                      .then(newContact => {
-                        console.log("Updating here")
-                        res.json(newContact)
-                      })
-                      .catch(error => {
-                        console.log(`Error is ${error.message}`)
-                        next(error)
-                      })
+                      .then(newContact => res.json(newContact))
+                      .catch(error => next(error))
             })
             .catch(error => next(error))
 })
